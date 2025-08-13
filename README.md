@@ -1,52 +1,151 @@
+# Project Setup Guide
+
 ## Requirements
-                                                                                                                                                                              
-- AMD64 CPU
-- Docker v28+ 
+
+- **AMD64 CPU with AVX Support**
+- **Docker v28+**
 
 ---
 
-Set Environments
+## System Configuration for High-Performance Networking and Docker Limits
 
+### 1. Update `sysctl` Configuration
+Open the system configuration file:
+```bash
+sudo vim /etc/sysctl.conf
+```
+
+Add or update the following parameters:
+```ini
+net.core.somaxconn = 65535
+fs.file-max = 2097152
+net.ipv4.tcp_max_syn_backlog = 8192
+net.ipv4.ip_local_port_range = 1024 65000
+net.ipv4.tcp_tw_reuse = 1
+```
+
+Apply the changes:
+```bash
+sudo sysctl --system
+```
+
+Verify the settings inside the Docker container:
+```bash
+docker exec -it tanym-postgres cat /proc/sys/net/core/somaxconn
+```
+
+### 2. Increase `ulimit` for Docker Containers
+Edit Docker's daemon configuration:
+```bash
+sudo vim /etc/docker/daemon.json
+```
+
+Add the following configuration:
+```json
+{
+  "default-ulimits": {
+    "nofile": {
+      "Name": "nofile",
+      "Hard": 200000,
+      "Soft": 200000
+    },
+    "nproc": {
+      "Name": "nproc",
+      "Hard": 200000,
+      "Soft": 200000
+    }
+  }
+}
+```
+
+Restart Docker:
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+
+---
+
+# Docker Setup & Usage Guide
+
+A step-by-step guide to setting up your environment, building Docker images, and managing containers, with explanations for each step.
+
+### 1. **Set Up Environment Variables**
+First, copy the example environment file and edit it with your preferred values.
 ```bash
 cp .env.example .env
 vim .env
 ```
+**Why:** The `.env` file stores configuration such as database credentials and API keys.
 
-Synchronize the time of the host machine with the docker machine so that firebase works correctly
-
+### 2. **Synchronize System Time**
+Make sure your host machine's timezone is set to UTC for services like Firebase to work correctly.
 ```bash
 sudo timedatectl set-timezone UTC
 ```
+**Why:** Time mismatches can cause authentication, token expiry, and logging issues.
 
-Docker: Build images
+### 3. **Build Docker Images**
+Depending on your environment:
 
+**Development mode:**
 ```bash
-# in development mode
 docker compose build
-
-# in production mode
+```
+**Production mode:**
+```bash
 docker compose -f docker-compose.yml -f docker-compose.prod.yml build
 ```
+**Why:** Building images ensures all dependencies and services are packaged and ready.
 
-Docker: Up containers
+### 4. **Start Docker Containers**
 
+**Development mode:**
 ```bash
-# in development mode
 docker compose up -d
-
-# in production mode
+```
+**Production mode:**
+```bash
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
+**Why:** `-d` runs containers in detached mode so they stay running in the background.
 
-Log into postgres shell
-
+### 5. **Access PostgreSQL Shell**
 ```bash
 psql $POSTGRES_USER $POSTGRES_DB
 ```
+**Why:** Allows direct interaction with your PostgreSQL database.
 
-List databases
-
-```
+### 6. **List All Databases**
+Inside the PostgreSQL shell:
+```psql
 \l
 ```
+**Why:** To verify existing databases and check connectivity.
+
+---
+
+## Tasks
+
+- ~~Init Rails app~~
+- ~~Init PostgreSQL~~
+- Init Telegram Bot
+- Set up Redis for caching and locking
+- Set up Nginx or Apache2 with Puma server and worker processes
+- Init Rails Thruster
+- Init web: cookie, session storage, cookie name, CORS, CSRF/XSRF, middleware, user-agent, locale, get IP address
+- Enable bootsnap in production mode
+- Init auth, token auth for mobile app, and cookie/session auth for web
+- Init frontend: nodejs, webpack, inertia, svelte, typescript, eslint, prettier, sass, postcss, autoprefixer, bootstrap, i18n, axios, router, 404 page, 5xx page, favicon
+- Init Admin-Panel
+- Init Active Job
+- Init Active Storage 
+- Init Active Cable
+- Init Anti-DDoS: lock by user, cookie, auth header, route paths
+- Init IP Rate Limit
+- Init slow query log
+- Init logrotate
+- Init backup
+- Init MongoDB
 
