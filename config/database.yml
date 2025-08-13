@@ -85,4 +85,6 @@ production:
   password: <%= ENV["POSTGRES_PASSWORD"] %>
   host: postgres
   port: 5432
+  timeout: 5000
+  statement_limit: 200
 
