@@ -1,0 +1,41 @@
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+root = true
+
+# Default settings
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# For Ruby, Rails, and Rake files
+[*.{rb,rake,ru,gemspec}]
+indent_style = space
+indent_size = 2
+
+# For YAML configuration files
+[*.yml]
+indent_style = space
+indent_size = 2
+
+# For JSON files
+[*.json]
+indent_style = space
+indent_size = 2
+
+# For Markdown files
+[*.md]
+trim_trailing_whitespace = false
+insert_final_newline = true
+
+# For JavaScript files (if any)
+[*.js]
+indent_style = space
+indent_size = 2
+
+# For SCSS/SASS files (if any)
+[*.{scss,sass}]
+indent_style = space
+indent_size = 2
+

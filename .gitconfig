@@ -1,0 +1,10 @@
+# git config --global user.email "me@nurassyl.kz"
+# git config --global user.name "Nurassyl Aldanov"
+
+[init]
+	defaultBranch = master
+[core]
+	autocrlf = false
+	safecrlf = false
+	eol = lf
+	editor = vim

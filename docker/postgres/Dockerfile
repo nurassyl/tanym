@@ -1,0 +1,16 @@
+# Base image
+FROM postgres:17.5
+
+# Upgrade system
+RUN apt-get update && apt-get upgrade -y
+
+ARG POSTGRES_PASSWORD
+ARG POSTGRES_USER
+ARG POSTGRES_DB
+
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_DB=${POSTGRES_DB}
+
+RUN apt-get install -y vim
+
