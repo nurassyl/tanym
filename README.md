@@ -111,13 +111,17 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 **Why:** `-d` runs containers in detached mode so they stay running in the background.
 
-### 5. **Access PostgreSQL Shell**
+---
+
+## PostgreSQL
+
+### Access PostgreSQL Shell
 ```bash
 psql $POSTGRES_USER $POSTGRES_DB
 ```
 **Why:** Allows direct interaction with your PostgreSQL database.
 
-### 6. **List All Databases**
+### List All Databases
 Inside the PostgreSQL shell:
 ```psql
 \l
@@ -126,11 +130,18 @@ Inside the PostgreSQL shell:
 
 ---
 
+## Lint
+```bash
+docker exec dev-tanym bundle exec rubocop
+```
+
+---
+
 ## Tasks
 
 - ~~Init Rails app~~
 - ~~Init PostgreSQL~~
-- ~~Set up Redis for caching and locking~~
+- ~~Init Redis for caching and distributed locking~~
 - Init Telegram Bot
 - Set up Nginx or Apache2 with Puma server and worker processes
 - Init web: cookie, session storage, cookie name, CORS, CSRF/XSRF, middleware, user-agent, locale, get IP address
