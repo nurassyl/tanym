@@ -44,25 +44,22 @@ module Tanym
     config.api_only = true
 
     config.cache_store = :redis_cache_store, {
-      # url: "redis://:#{ENV.fetch('REDIS_PASSWORD')}@redis:6379/2",
+      url: "redis://:#{ENV.fetch('REDIS_PASSWORD')}@redis:6379/2",
       # Optional timeouts (seconds)
-      # connect_timeout: 1.0,
-      # read_timeout: 1.5,
-      # write_timeout: 1.5,
-      # Optional pool (for Puma/Sidekiq)
-      # pool: {
-      #  size: Integer(ENV.fetch("RAILS_MAX_THREADS", 5)),
-      #  timeout: 5
-      # },
-      pool: $redis,
+      connect_timeout: 1.0,
+      read_timeout: 1.5,
+      write_timeout: 1.5,
       namespace: "#{ENV.fetch('APP_NAME', 'app_name').downcase}:cache",
+      pool_size: ENV.fetch("RAILS_MAX_THREADS", 5).to_i, # for Puma/Sidekiq
+      pool_timeout: 5,
       error_handler: ->(method:, returning:, exception:) {
         Rails.logger.warn("RedisCacheStore error: #{method} -> #{exception.class}: #{exception.message}")
       },
-      expires_in: 90.minutes,
+      skip_nil: true,
       compress: true,
       compress_threshold: 2.kilobytes,
-      skip_nil: true
+      expires_in: 90.minutes,
+      race_condition_ttl: 10.seconds
     }
   end
 end

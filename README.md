@@ -161,4 +161,5 @@ docker exec dev-tanym bundle exec rubocop
 - Enable bootsnap in production mode
 - Init Rails Thruster
 - Init MongoDB
+- Setup dedicated Redis server with memory optimizations (disable THP, enable overcommit_memory)
 
