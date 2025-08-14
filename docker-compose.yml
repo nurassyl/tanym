@@ -8,11 +8,13 @@ x-tanym-common: &tanym-common
   stdin_open: true
   hostname: tanym
   environment:
+    - APP_NAME=${APP_NAME}
     - NODE_ENV=${NODE_ENV}
     - RAILS_ENV=${RAILS_ENV}
     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     - POSTGRES_USER=${POSTGRES_USER}
     - POSTGRES_DB=${POSTGRES_DB}
+    - REDIS_PASSWORD=${REDIS_PASSWORD}
 
 services:
   tanym:
@@ -24,9 +26,11 @@ services:
     depends_on:
       postgres:
         condition: service_started
+      redis:
+        condition: service_started
 
   postgres:
-    image: tanym/${CONTAINER_PREFIX}postgres
+    image: tanym/${CONTAINER_PREFIX}tanym/postgres
     sysctls:
       net.core.somaxconn: 65535
     build:
@@ -46,6 +50,23 @@ services:
       - ./docker/postgres/pg_hba.conf:/var/lib/postgresql/data/pgdata/pg_hba.conf
       - postgres_data:/var/lib/postgresql/data
 
+  redis:
+    image: tanym/${CONTAINER_PREFIX}tanym/redis
+    build:
+      context: .
+      dockerfile: docker/redis/Dockerfile
+      args:
+        REDIS_PASSWORD: ${REDIS_PASSWORD}
+    platform: linux/amd64
+    container_name: ${CONTAINER_PREFIX}tanym-redis
+    restart: always
+    command: redis-server /etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
+    volumes:
+      # Redis configuration file example: https://redis.io/docs/management/config-file/
+      - ./docker/redis/redis.conf:/etc/redis/redis.conf
+      - redis_data:/data
+
 volumes:
   postgres_data:
+  redis_data:
 

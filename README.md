@@ -130,22 +130,24 @@ Inside the PostgreSQL shell:
 
 - ~~Init Rails app~~
 - ~~Init PostgreSQL~~
+- ~~Set up Redis for caching and locking~~
 - Init Telegram Bot
-- Set up Redis for caching and locking
 - Set up Nginx or Apache2 with Puma server and worker processes
-- Init Rails Thruster
 - Init web: cookie, session storage, cookie name, CORS, CSRF/XSRF, middleware, user-agent, locale, get IP address
-- Enable bootsnap in production mode
 - Init auth, token auth for mobile app, and cookie/session auth for web
 - Init frontend: nodejs, webpack, inertia, svelte, typescript, eslint, prettier, sass, postcss, autoprefixer, bootstrap, i18n, axios, router, 404 page, 5xx page, favicon
 - Init Admin-Panel
 - Init Active Job
-- Init Active Storage 
+- Init Active Storage
 - Init Active Cable
 - Init Anti-DDoS: lock by user, cookie, auth header, route paths
 - Init IP Rate Limit
 - Init slow query log
 - Init logrotate
 - Init backup
+- Enabling Controller Caching for Performance in config/environments/production.rb: config.action_controller.perform_caching = false in production mode
+- Init redis-rack-cache
+- Enable bootsnap in production mode
+- Init Rails Thruster
 - Init MongoDB
 

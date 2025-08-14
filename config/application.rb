@@ -13,6 +13,8 @@ require "action_controller/railtie"
 require "action_view/railtie"
 # require "action_cable/engine"
 # require "rails/test_unit/railtie"
+require "active_support/core_ext/numeric/bytes"
+require "active_support/core_ext/numeric/time"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -40,5 +42,27 @@ module Tanym
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.cache_store = :redis_cache_store, {
+      # url: "redis://:#{ENV.fetch('REDIS_PASSWORD')}@redis:6379/2",
+      # Optional timeouts (seconds)
+      # connect_timeout: 1.0,
+      # read_timeout: 1.5,
+      # write_timeout: 1.5,
+      # Optional pool (for Puma/Sidekiq)
+      # pool: {
+      #  size: Integer(ENV.fetch("RAILS_MAX_THREADS", 5)),
+      #  timeout: 5
+      # },
+      pool: $redis,
+      namespace: "#{ENV.fetch('APP_NAME', 'app_name').downcase}:cache",
+      error_handler: ->(method:, returning:, exception:) {
+        Rails.logger.warn("RedisCacheStore error: #{method} -> #{exception.class}: #{exception.message}")
+      },
+      expires_in: 90.minutes,
+      compress: true,
+      compress_threshold: 2.kilobytes,
+      skip_nil: true
+    }
   end
 end

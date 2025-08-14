@@ -28,3 +28,9 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
+
+# Redis client
+gem "redis", "~> 5.4.1"
+
+# Distributed lock manager
+gem "redlock", "~> 2.0.6"
