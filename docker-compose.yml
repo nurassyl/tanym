@@ -46,9 +46,13 @@ services:
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - ./docker/postgres/postgresql.conf:/var/lib/postgresql/data/pgdata/postgresql.conf
-      - ./docker/postgres/pg_hba.conf:/var/lib/postgresql/data/pgdata/pg_hba.conf
       - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./docker/postgres/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    command: >
+      postgres
+      -c config_file=/etc/postgresql/postgresql.conf
+      -c hba_file=/etc/postgresql/pg_hba.conf
 
   redis:
     image: tanym/${CONTAINER_PREFIX}tanym/redis
