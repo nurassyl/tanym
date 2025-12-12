@@ -87,12 +87,43 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     drb (2.2.3)
+    dry-core (1.1.0)
+      concurrent-ruby (~> 1.0)
+      logger
+      zeitwerk (~> 2.6)
+    dry-inflector (1.2.0)
+    dry-logic (1.6.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
+    dry-struct (1.8.0)
+      dry-core (~> 1.1)
+      dry-types (~> 1.8, >= 1.8.2)
+      ice_nine (~> 0.11)
+      zeitwerk (~> 2.6)
+    dry-types (1.8.3)
+      bigdecimal (~> 3.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
     erb (5.0.2)
     erubi (1.13.1)
+    faraday (2.14.0)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-multipart (1.1.1)
+      multipart-post (~> 2.0)
+    faraday-net_http (3.4.2)
+      net-http (~> 0.5)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
+    ice_nine (0.11.2)
     io-console (0.8.1)
     irb (1.15.2)
       pp (>= 0.6.0)
@@ -113,6 +144,9 @@ GEM
     marcel (1.0.4)
     mini_mime (1.1.5)
     minitest (5.25.5)
+    multipart-post (2.4.1)
+    net-http (0.8.0)
+      uri (>= 0.11.1)
     net-imap (0.5.9)
       date
       net-protocol
@@ -242,6 +276,11 @@ GEM
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
     stringio (3.1.7)
+    telegram-bot-ruby (2.4.0)
+      dry-struct (~> 1.6)
+      faraday (~> 2.0)
+      faraday-multipart (~> 1.0)
+      zeitwerk (~> 2.6)
     thor (1.4.0)
     timeout (0.4.3)
     tzinfo (2.0.6)
@@ -272,12 +311,14 @@ PLATFORMS
 DEPENDENCIES
   brakeman
   debug
+  faraday (~> 2.14)
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 8.0.2)
   redis (~> 5.4.1)
   redlock (~> 2.0.6)
   rubocop-rails-omakase
+  telegram-bot-ruby (~> 2.4)
   tzinfo-data
 
 BUNDLED WITH

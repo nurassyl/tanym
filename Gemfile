@@ -34,3 +34,9 @@ gem "redis", "~> 5.4.1"
 
 # Distributed lock manager
 gem "redlock", "~> 2.0.6"
+
+# Telegram Bot
+gem "telegram-bot-ruby", "~> 2.4"
+
+# HTTP Client
+gem "faraday", "~> 2.14"

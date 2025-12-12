@@ -1,12 +1,11 @@
 x-tanym-common: &tanym-common
   image: tanym/${CONTAINER_PREFIX}tanym
   platform: linux/amd64
-  container_name: ${CONTAINER_PREFIX}tanym
   restart: always
-  privileged: true
   tty: true
   stdin_open: true
-  hostname: tanym
+  volumes:
+    - ./:/app
   environment:
     - APP_NAME=${APP_NAME}
     - NODE_ENV=${NODE_ENV}
@@ -15,6 +14,8 @@ x-tanym-common: &tanym-common
     - POSTGRES_USER=${POSTGRES_USER}
     - POSTGRES_DB=${POSTGRES_DB}
     - REDIS_PASSWORD=${REDIS_PASSWORD}
+    - TELEGRAM_WEBHOOK_SECRET=${TELEGRAM_WEBHOOK_SECRET}
+    - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
 
 services:
   tanym:
@@ -23,10 +24,19 @@ services:
       context: .
       dockerfile: docker/tanym/Dockerfile
     command: bin/rails s -b 0.0.0.0 -p 3000
+    container_name: ${CONTAINER_PREFIX}tanym
     depends_on:
       postgres:
         condition: service_started
       redis:
+        condition: service_started
+
+  tg-bot:
+    <<: *tanym-common
+    command: ["bundle", "exec", "ruby", "tg-bot.rb"]
+    container_name: ${CONTAINER_PREFIX}tanym-tg-bot
+    depends_on:
+      tanym:
         condition: service_started
 
   postgres:

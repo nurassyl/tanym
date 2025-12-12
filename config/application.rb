@@ -61,5 +61,13 @@ module Tanym
       expires_in: 90.minutes,
       race_condition_ttl: 10.seconds
     }
+
+    # Middleware
+    require Rails.root.join("app/middleware/telegram_secret_auth")
+    config.middleware.insert_before(0, TelegramSecretAuth)
+
+    config.host_authorization = {
+      exclude: ->(request) { request.path.start_with?("/telegram/") }
+    }
   end
 end
